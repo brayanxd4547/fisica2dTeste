@@ -128,13 +128,18 @@ public class Simulador extends JPanel implements ActionListener {
 
         // Adicionar objetos
         objetos = new ArrayList<>(Arrays.asList(
-                /* SISTEMA SOL TERRA LUA
-                new Objeto(0, 0, 0, 0, 1.989e30, 696350, Color.YELLOW),  // Sol
-                new Objeto(149_600_000, 0, 0, Math.sqrt(G * 1.989e30 / 149_600_000), 5.9722e24, 3189, Color.BLUE),  // Terra
-                new Objeto(149_600_000+384_000, 0, 0, Math.sqrt(G * 1.989e30 / 149_600_000)+Math.sqrt(G * 5.9722e24 / 384_000), 7.35e22, 1737.4, Color.WHITE), // Lua
-                */
+                /* SISTEMA SOL TERRA LUA*/
+                new Objeto(0, 0, 0, 0, 1.98e30, 696350, Color.yellow),  // Sol
+                new Objeto(57.9e6, 0, 0, Math.sqrt(G * 1.98e30 / 57.9e6), 3.3e23, 2440, Color.lightGray),  // Mercúrio
+                new Objeto(108.2e6, 0, 0, Math.sqrt(G * 1.98e30 / 108.2e6), 4.87e24, 6052, Color.orange),  // Vênus
+                new Objeto(149.6e6, 0, 0, Math.sqrt(G * 1.98e30 / 149.6e6), 5.97e24, 6371, Color.blue),  // Terra
+                new Objeto(149.6e6+384e3, 0, 0, Math.sqrt(G * 1.98e30 / 149.6e6)+Math.sqrt(G * 5.97e24 / 384e3), 7.35e22, 1737, Color.white), // Lua
+                new Objeto(227.9e6, 0, 0, Math.sqrt(G * 1.98e30 / 227.9e6), 6.42e23, 3390, Color.orange),  // Marte
+                new Objeto(227.9e6, 0, 0, Math.sqrt(G * 1.98e30 / 227.9e6), 1.9e27, 69911, Color.orange),  // Júpiter
 
-                new Objeto(100, 100, 20, 20, 30, 30, Color.BLUE),
+
+
+                /*new Objeto(100, 100, 20, 20, 30, 30, Color.BLUE),
                 new Objeto(600, 100, -30, 20, 40, 40, Color.ORANGE),
                 new Objeto(100, 600, 20, -30, 25, 25, Color.RED),
                 new Objeto(600, 600, -25, -25, 50, 50, Color.GREEN),
@@ -143,7 +148,7 @@ public class Simulador extends JPanel implements ActionListener {
                 new Objeto(50, 300, 35, 0, 28, 28, Color.YELLOW),
                 new Objeto(700, 300, -35, 0, 45, 45, Color.PINK),
                 new Objeto(200, 400, 12, -15, 22, 22, Color.GRAY),
-                new Objeto(400, 200, -15, 12, 30, 30, Color.LIGHT_GRAY)
+                new Objeto(400, 200, -15, 12, 30, 30, Color.LIGHT_GRAY)*/
         ));
 
         // Inicar temporizador
