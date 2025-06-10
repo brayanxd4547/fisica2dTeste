@@ -10,7 +10,7 @@ import java.awt.event.*;
 
 public class Simulador extends JPanel implements ActionListener {
     // Câmera
-    private double zoom = 1;
+    private double zoom = 40;
     private double offsetX = 0;
     private double offsetY = 0;
     private Point lastMousePos = null;
@@ -18,7 +18,7 @@ public class Simulador extends JPanel implements ActionListener {
     private int numObjFoco = 0;
 
     // Gravidade
-    private static final double G = 1e-7; // Recomendado 1e-7 para visualizar órbita planetária
+    private static final double G = 6.6743e-11; // 6.6743e-11
 
     // Lista de objetos
     ArrayList<Objeto> objetos;
@@ -39,7 +39,7 @@ public class Simulador extends JPanel implements ActionListener {
             } else if (delta < 0) {
                 zoom /= zoomFactor;
             }
-            zoom = Math.max(0.00000001, Math.min(zoom, 10000000)); // limita zoom entre 0.1 e 10
+            zoom = Math.max(1e-15, Math.min(zoom, 1e15)); // limita zoom entre 0.1 e 10
             repaint();
         });
 
@@ -105,7 +105,7 @@ public class Simulador extends JPanel implements ActionListener {
             }
         });
 
-        // Teclas de seta para direita e esquerda
+        // Teclas
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -123,32 +123,52 @@ public class Simulador extends JPanel implements ActionListener {
                     focoCamera = objetos.get(numObjFoco);
                     System.out.println("Seta para esquerda pressionada. Foco: " + focoCamera);
                 }
+
+                if (e.getKeyCode() == KeyEvent.VK_1) { // Seta para esquerda
+                    zoom = 1e-8;
+                }
+
+                if (e.getKeyCode() == KeyEvent.VK_2) { // Seta para esquerda
+                    zoom = 40;
+                }
             }
         });
 
         // Adicionar objetos
         objetos = new ArrayList<>(Arrays.asList(
-                /* SISTEMA SOL TERRA LUA*/
-                new Objeto(0, 0, 0, 0, 1.98e30, 696350, Color.yellow),  // Sol
-                new Objeto(57.9e6, 0, 0, Math.sqrt(G * 1.98e30 / 57.9e6), 3.3e23, 2440, Color.lightGray),  // Mercúrio
-                new Objeto(108.2e6, 0, 0, Math.sqrt(G * 1.98e30 / 108.2e6), 4.87e24, 6052, Color.orange),  // Vênus
-                new Objeto(149.6e6, 0, 0, Math.sqrt(G * 1.98e30 / 149.6e6), 5.97e24, 6371, Color.blue),  // Terra
-                new Objeto(149.6e6+384e3, 0, 0, Math.sqrt(G * 1.98e30 / 149.6e6)+Math.sqrt(G * 5.97e24 / 384e3), 7.35e22, 1737, Color.white), // Lua
-                new Objeto(227.9e6, 0, 0, Math.sqrt(G * 1.98e30 / 227.9e6), 6.42e23, 3390, Color.orange),  // Marte
-                new Objeto(227.9e6, 0, 0, Math.sqrt(G * 1.98e30 / 227.9e6), 1.9e27, 69911, Color.orange),  // Júpiter
+                // Sistema Solar
+                new Objeto(0, 0, 0, 0, 1.9885e30, 6.9634e8, new Color(255, 255, 255)), // Sol
 
+                new Objeto(5.79e10, 0, 0, Math.sqrt(G * 1.9885e30 / 5.79e10), 3.3011e23, 2.4397e6, new Color(97, 97, 97)), // Mercúrio
 
+                new Objeto(1.082e11, 0, 0, Math.sqrt(G * 1.9885e30 / 1.082e11), 4.8675e24, 6.0518e6, new Color(213, 194, 156)), // Vênus
 
-                /*new Objeto(100, 100, 20, 20, 30, 30, Color.BLUE),
-                new Objeto(600, 100, -30, 20, 40, 40, Color.ORANGE),
-                new Objeto(100, 600, 20, -30, 25, 25, Color.RED),
-                new Objeto(600, 600, -25, -25, 50, 50, Color.GREEN),
-                new Objeto(300, 50, 0, 35, 20, 20, Color.MAGENTA),
-                new Objeto(300, 700, 0, -40, 35, 35, Color.CYAN),
-                new Objeto(50, 300, 35, 0, 28, 28, Color.YELLOW),
-                new Objeto(700, 300, -35, 0, 45, 45, Color.PINK),
-                new Objeto(200, 400, 12, -15, 22, 22, Color.GRAY),
-                new Objeto(400, 200, -15, 12, 30, 30, Color.LIGHT_GRAY)*/
+                new Objeto(1.496e11, 0, 0, Math.sqrt(G * 1.9885e30 / 1.496e11), 5.972e24, 6.371e6, new Color(80, 136, 181)), // Terra
+                new Objeto(1.496e11,-6.371e6-2,0,Math.sqrt(G * 1.9885e30 / 1.496e11),0.6,0.3, new Color(255, 128, 0)), // Bola de basquete
+                new Objeto(1.496e11,6.371e6+1,0,Math.sqrt(G * 1.9885e30 / 1.496e11),0.3,0.2, new Color(255, 255, 255)), // Bola de futebol
+                new Objeto(1.496e11 + 384e6, 0, 0, Math.sqrt(G * 1.9885e30 / 1.496e11) + Math.sqrt(G * 5.972e24 / 384e6), 7.346e22, 1.737e6, new Color(168, 168, 168)), // Lua (Terra)
+
+                new Objeto(2.279e11, 0, 0, Math.sqrt(G * 1.9885e30 / 2.279e11), 6.4171e23, 3.3895e6, new Color(220, 113, 83)), // Marte
+                new Objeto(2.279e11 + 9.378e6, 0, 0, Math.sqrt(G * 1.9885e30 / 2.279e11) + Math.sqrt(G * 6.4171e23 / 9.378e6), 1.0659e16, 11.08e3, new Color(193, 187, 177)), // Fobos (Marte)
+                new Objeto(2.279e11 + 23.463e6, 0, 0, Math.sqrt(G * 1.9885e30 / 2.279e11) + Math.sqrt(G * 6.4171e23 / 23.463e6), 1.4762e15, 6.2e3, new Color(204, 197, 193)), // Deimos (Marte)
+
+                new Objeto(7.785e11, 0, 0, Math.sqrt(G * 1.9885e30 / 7.785e11), 1.8982e27, 6.9911e7, new Color(205, 179, 155)), // Júpiter
+                new Objeto(7.785e11 + 421.8e6, 0, 0, Math.sqrt(G * 1.9885e30 / 7.785e11) + Math.sqrt(G * 1.8982e27 / 421.8e6), 8.9319e22, 1.821e6, new Color(240, 238, 100)), // Io (Júpiter)
+                new Objeto(7.785e11 + 670.9e6, 0, 0, Math.sqrt(G * 1.9885e30 / 7.785e11) + Math.sqrt(G * 1.8982e27 / 670.9e6), 4.7998e22, 1.561e6, new Color(239, 229, 215)), // Europa (Júpiter)
+                new Objeto(7.785e11 + 1070.4e6, 0, 0, Math.sqrt(G * 1.9885e30 / 7.785e11) + Math.sqrt(G * 1.8982e27 / 1070.4e6), 1.4819e23, 2.631e6, new Color(213, 184, 152)), // Ganimedes (Júpiter)
+                new Objeto(7.785e11 + 1882.7e6, 0, 0, Math.sqrt(G * 1.9885e30 / 7.785e11) + Math.sqrt(G * 1.8982e27 / 1882.7e6), 1.076e23, 2.410e6, new Color(181, 144, 108)), // Calisto (Júpiter)
+
+                new Objeto(1.433e12, 0, 0, Math.sqrt(G * 1.9885e30 / 1.433e12), 5.6834e26, 5.8232e7, new Color(251, 232, 198)), // Saturno
+                new Objeto(1.433e12 + 1221.87e6, 0, 0, Math.sqrt(G * 1.9885e30 / 1.433e12) + Math.sqrt(G * 5.6834e26 / 1221.87e6), 1.3455e23, 2.575e6, new Color(241, 209, 121)), // Titã (Saturno)
+                new Objeto(1.433e12 + 527.1e6, 0, 0, Math.sqrt(G * 1.9885e30 / 1.433e12) + Math.sqrt(G * 5.6834e26 / 527.1e6), 2.3065e21, 763.5e3, new Color(230, 229, 210)), // Reia (Saturno)
+                new Objeto(1.433e12 + 237.9e6, 0, 0, Math.sqrt(G * 1.9885e30 / 1.433e12) + Math.sqrt(G * 5.6834e26 / 237.9e6), 1.08e20, 252.1e3, new Color(236, 236, 236)), // Encélado (Saturno)
+
+                new Objeto(2.872e12, 0, 0, Math.sqrt(G * 1.9885e30 / 2.872e12), 8.6810e25, 2.5362e7, new Color(208, 254, 255)), // Urano
+                new Objeto(2.872e12 + 1276e6, 0, 0, Math.sqrt(G * 1.9885e30 / 2.872e12) + Math.sqrt(G * 8.6810e25 / 1276e6), 3.529e21, 788.9e3, new Color(220, 209, 191)), // Titânia (Urano)
+                new Objeto(2.872e12 + 1170e6, 0, 0, Math.sqrt(G * 1.9885e30 / 2.872e12) + Math.sqrt(G * 8.6810e25 / 1170e6), 3.014e21, 761.4e3, new Color(200, 200, 200)), // Oberon (Urano)
+
+                new Objeto(4.495e12, 0, 0, Math.sqrt(G * 1.9885e30 / 4.495e12), 1.02413e26, 2.4622e7, new Color(148, 222, 244)), // Netuno
+                new Objeto(4.495e12 + 354.8e6, 0, 0, Math.sqrt(G * 1.9885e30 / 4.495e12) + Math.sqrt(G * 1.02413e26 / 354.8e6), 2.14e22, 1.352e6, new Color(207, 206, 206)) // Tritão (Netuno)
         ));
 
         // Inicar temporizador

@@ -27,11 +27,14 @@ public class Objeto {
 
     void desenhar(Graphics2D g2, double centroX, double centroY, double offsetX, double offsetY, double zoom) {
         double diametro = 2 * raio * zoom;
+        Color nCor = cor;
+
         if (diametro < 5) {
             diametro = 5;
+            nCor = nCor.darker();
         }
 
-        g2.setColor(cor);
+        g2.setColor(nCor);
         Ellipse2D.Double elipse = new Ellipse2D.Double(
                 centroX + (x - offsetX) * zoom - raio * zoom,
                 centroY + (y - offsetY) * zoom - raio * zoom,
