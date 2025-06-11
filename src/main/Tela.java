@@ -9,8 +9,7 @@ public class Tela extends JPanel {
     // Configurações
     public static final int LARGURA = 800;
     public static final int ALTURA = 600;
-    public static final int FPS = 60;
-    private final double velSimulacao = 200000;
+    private final double velSimulacao = 1;
 
     // Câmera
     private int numObjFoco = 6; // Objeto focado
@@ -136,13 +135,15 @@ public class Tela extends JPanel {
         // Zoom inicial
         zoom = 20 / objetos.get(numObjFoco).getRaio();
 
-        Timer timer = new Timer(1000 / Tela.FPS, _ -> {
+        Timer timer = new Timer(0, _ -> {
             // Calcular delta time
             long momentoAtual = System.nanoTime();
-            double dt = (momentoAtual - ultimoMomento) / 1_000_000_000.0 * velSimulacao;
+            double dt = (momentoAtual - ultimoMomento) / 1e9;
+            System.out.println(dt/velSimulacao);
+            dt *= velSimulacao;
             ultimoMomento = momentoAtual;
 
-            // Simular um quadro
+            // Simular um frame
             simulador.simularFisica(dt);
 
             // Alterar foco da câmera
