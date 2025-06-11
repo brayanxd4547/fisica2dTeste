@@ -31,18 +31,10 @@ public class Objeto {
         double diametro = 2 * raio * zoom;
         Color nCor = cor;
 
-        /*if (diametro < 5) {
+        if (diametro < 5) {
             diametro = 5;
             nCor = nCor.darker();
-        }*/
-
-        /*Ellipse2D.Double borda = new Ellipse2D.Double(
-                centroX + (x - offsetX) * zoom - raio * zoom - 3,
-                centroY + (y - offsetY) * zoom - raio * zoom - 3,
-                diametro,
-                diametro
-        );
-        g2.fill(borda);*/
+        }
 
         g2.setColor(nCor);
         Ellipse2D.Double circulo = new Ellipse2D.Double(
@@ -53,11 +45,13 @@ public class Objeto {
         );
         g2.fill(circulo);
 
-        g2.setColor(Color.white);
-        g2.drawString(
-                nome,
-                (float) (centroX + (x - offsetX) * zoom + raio * zoom),
-                (float) (centroY + (y - offsetY) * zoom)
-        );
+        if (raio * zoom > 0.2) {
+            g2.setColor(Color.white);
+            g2.drawString(
+                    nome,
+                    (float) (centroX + (x - offsetX) * zoom + raio * zoom + 10),
+                    (float) (centroY + (y - offsetY) * zoom)
+            );
+        }
     }
 }

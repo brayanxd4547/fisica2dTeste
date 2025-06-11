@@ -8,7 +8,7 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(Tela.LARGURA, Tela.ALTURA);
         frame.setResizable(true);
-        frame.add(new Simulador());
+        frame.add(new Tela());
         frame.setVisible(true);
     }
 }
