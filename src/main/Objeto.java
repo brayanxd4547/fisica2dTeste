@@ -4,27 +4,75 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
 public class Objeto {
-    String nome;
-    double x, y;
-    double vx, vy;
-    double m;
-    double raio;
-    Color cor;
+    private String nome;
+    private double x, y;
+    private double velX, velY;
+    private double massa;
+    private double raio;
+    private Color cor;
 
-    public Objeto(String nome, double x, double y, double vx, double vy, double m, double raio, Color cor) {
+    public Objeto(String nome, double x, double y, double velX, double velY, double massa, double raio, Color cor) {
         this.nome = nome;
         this.x = x;
         this.y = y;
-        this.vx = vx;
-        this.vy = vy;
-        this.m = m;
+        this.velX = velX;
+        this.velY = velY;
+        this.massa = massa;
         this.raio = raio;
         this.cor = cor;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getVelX() {
+        return velX;
+    }
+
+    public double getVelY() {
+        return velY;
+    }
+
+    public double getMassa() {
+        return massa;
+    }
+
+    public double getRaio() {
+        return raio;
+    }
+
+    public Color getCor() {
+        return cor;
+    }
+
+    public void setVelX(double velX){
+        this.velX = velX;
+    }
+
+    public void setVelY(double velY){
+        this.velY = velY;
+    }
+
+    public void setX(double x){
+        this.x = x;
+    }
+
+    public void setY(double y){
+        this.y = y;
+    }
+
     void mover(double dt) {
-        x += vx * dt;
-        y += vy * dt;
+        x += velX * dt;
+        y += velY * dt;
     }
 
     void desenhar(Graphics2D g2, double centroX, double centroY, double offsetX, double offsetY, double zoom) {

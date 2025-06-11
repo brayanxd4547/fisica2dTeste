@@ -9,11 +9,11 @@ public class Tela extends JPanel {
     // Configurações
     public static final int LARGURA = 800;
     public static final int ALTURA = 600;
-    public static final int FPS = 2000;
-    private final double velSimulacao = 4;
-    private int numObjFoco = 4; // Objeto focado
+    public static final int FPS = 60;
+    private final double velSimulacao = 200000;
 
     // Câmera
+    private int numObjFoco = 6; // Objeto focado
     private double zoom;
     private double offsetX;
     private double offsetY;
@@ -62,13 +62,13 @@ public class Tela extends JPanel {
                     // Procura objeto que foi clicado
                     boolean objEncontrado = false;
                     for (Objeto o : objetos) {
-                        double dx = mouseX - o.x;
-                        double dy = mouseY - o.y;
+                        double dx = mouseX - o.getX();
+                        double dy = mouseY - o.getY();
                         double dist2 = dx * dx + dy * dy;
 
-                        if (dist2 <= (o.raio) * (o.raio)) {
+                        if (dist2 <= (o.getRaio()) * (o.getRaio())) {
                             objEncontrado = true;
-                            System.out.println("Clique sobre o objeto: " + o.nome);
+                            System.out.println("Clique sobre o objeto: " + o.getNome());
                             numObjFoco = objetos.indexOf(o);
                             break;
                         }
@@ -110,14 +110,14 @@ public class Tela extends JPanel {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) { // Seta para direita
                     numObjFoco++;
                     numObjFoco = numObjFoco % objetos.size(); // Garante que numObjFoco se mantenha na lista
-                    System.out.println("Seta para direita pressionada. Foco: " + objetos.get(numObjFoco).nome);
+                    System.out.println("Seta para direita pressionada. Foco: " + objetos.get(numObjFoco).getNome());
 
                 }
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) { // Seta para esquerda
                     numObjFoco--;
                     numObjFoco += objetos.size(); // Impede que numObjFoco seja negativo
                     numObjFoco = numObjFoco % objetos.size();
-                    System.out.println("Seta para esquerda pressionada. Foco: " + objetos.get(numObjFoco).nome);
+                    System.out.println("Seta para esquerda pressionada. Foco: " + objetos.get(numObjFoco).getNome());
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_1) { // Seta para esquerda
@@ -134,7 +134,7 @@ public class Tela extends JPanel {
         setBackground(Color.black);
 
         // Zoom inicial
-        zoom = 20 / objetos.get(numObjFoco).raio;
+        zoom = 20 / objetos.get(numObjFoco).getRaio();
 
         Timer timer = new Timer(1000 / Tela.FPS, _ -> {
             // Calcular delta time
@@ -147,8 +147,8 @@ public class Tela extends JPanel {
 
             // Alterar foco da câmera
             if (numObjFoco != -1) {
-                offsetX = objetos.get(numObjFoco).x;
-                offsetY = objetos.get(numObjFoco).y;
+                offsetX = objetos.get(numObjFoco).getX();
+                offsetY = objetos.get(numObjFoco).getY();
             }
 
             repaint(); // Atualiza o frame

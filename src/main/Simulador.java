@@ -8,18 +8,14 @@ public class Simulador {
     // Constantes
     private final double G = 6.6743e-11; // Constante gravitacional: 6.6743e-11
 
-    // Lista de objetos
     public ArrayList<Objeto> objetos;
 
     public Simulador() {
-        // Criar objetos
         objetos = adicionarSistemaSolar();
     }
 
     public void simularFisica(double dt){
-        // Aplicar gravidade e colisão entre pares
-
-        // 1. Calcular forças gravitacionais
+        // Calcular forças gravitacionais
         int n = objetos.size();
         for (int i = 0; i < n; i++) {
             Objeto a = objetos.get(i);
@@ -27,8 +23,8 @@ public class Simulador {
                 Objeto b = objetos.get(j);
 
                 // Calcular distância entre um par
-                double dx = a.x - b.x;
-                double dy = a.y - b.y;
+                double dx = a.getX() - b.getX();
+                double dy = a.getY() - b.getY();
                 double dist2 = dx * dx + dy * dy;
 
                 if (dist2 == 0) continue; // Evitar divisão por zero
@@ -37,20 +33,20 @@ public class Simulador {
             }
         }
 
-        // 2. Mover objetos após todas as forças aplicadas
+        // Mover objetos após todas as forças aplicadas
         objetos.forEach(o -> o.mover(dt));
 
-        // 3. Detectar e resolver colisões
+        // Detectar e resolver colisões
         for (int i = 0; i < n; i++) {
             Objeto a = objetos.get(i);
             for (int j = i + 1; j < n; j++) {
                 Objeto b = objetos.get(j);
 
                 // Calcular distância entre um par
-                double dx = a.x - b.x;
-                double dy = a.y - b.y;
+                double dx = a.getX() - b.getX();
+                double dy = a.getY() - b.getY();
                 double dist2 = dx * dx + dy * dy;
-                double somaRaios = a.raio + b.raio;
+                double somaRaios = a.getRaio() + b.getRaio();
                 if (dist2 <= somaRaios * somaRaios) {
                     calcularColisao(a, b, dx, dy, dist2);
                 }
@@ -60,51 +56,51 @@ public class Simulador {
 
     private void aplicarGravidade(Objeto a, Objeto b, double dx, double dy, double dist2, double dt) {
         double dist = Math.sqrt(dist2);
-        double forca = G * a.m * b.m / dist2;
+        double forca = G * a.getMassa() * b.getMassa() / dist2;
         double ux = dx / dist;
         double uy = dy / dist;
 
-        double ax = -forca * ux / a.m;
-        double ay = -forca * uy / a.m;
-        double bx = forca * ux / b.m;
-        double by = forca * uy / b.m;
+        double ax = -forca * ux / a.getMassa();
+        double ay = -forca * uy / a.getMassa();
+        double bx = forca * ux / b.getMassa();
+        double by = forca * uy / b.getMassa();
 
-        a.vx += ax * dt;
-        a.vy += ay * dt;
-        b.vx += bx * dt;
-        b.vy += by * dt;
+        a.setVelX(a.getVelX() + ax * dt);
+        a.setVelY(a.getVelY() + ay * dt);
+        b.setVelX(b.getVelX() + bx * dt);
+        b.setVelY(b.getVelY() + by * dt);
     }
 
     private void calcularColisao(Objeto a, Objeto b, double dx, double dy, double dist2) {
-        double dvx = a.vx - b.vx;
-        double dvy = a.vy - b.vy;
+        double dvx = a.getVelX() - b.getVelX();
+        double dvy = a.getVelY() - b.getVelY();
 
         double prodEscalar = dvx * dx + dvy * dy;
         if (prodEscalar >= 0) return;
 
-        double fator = (2 * prodEscalar) / ((a.m + b.m) * dist2);
+        double fator = (2 * prodEscalar) / ((a.getMassa() + b.getMassa()) * dist2);
         double impulsoX = fator * dx;
         double impulsoY = fator * dy;
 
-        a.vx -= impulsoX * b.m;
-        a.vy -= impulsoY * b.m;
-        b.vx += impulsoX * a.m;
-        b.vy += impulsoY * a.m;
+        a.setVelX(a.getVelX() - impulsoX * b.getMassa());
+        a.setVelY(a.getVelY() - impulsoY * b.getMassa());
+        b.setVelX(b.getVelX() + impulsoX * a.getMassa());
+        b.setVelY(b.getVelY() + impulsoY * a.getMassa());
 
         double dist = Math.sqrt(dist2);
-        double sobreposicao = (a.raio + b.raio) - dist;
+        double sobreposicao = (a.getRaio() + b.getRaio()) - dist;
         if (sobreposicao > 0) {
             double nx = dx / dist;
             double ny = dy / dist;
 
-            double massaTotal = a.m + b.m;
-            double proporcaoA = b.m / massaTotal;
-            double proporcaoB = a.m / massaTotal;
+            double massaTotal = a.getMassa() + b.getMassa();
+            double proporcaoA = b.getMassa() / massaTotal;
+            double proporcaoB = a.getMassa() / massaTotal;
 
-            a.x += nx * sobreposicao * proporcaoA;
-            a.y += ny * sobreposicao * proporcaoA;
-            b.x -= nx * sobreposicao * proporcaoB;
-            b.y -= ny * sobreposicao * proporcaoB;
+            a.setX(a.getX() + nx * sobreposicao * proporcaoA);
+            a.setY(a.getY() + ny * sobreposicao * proporcaoA);
+            b.setX(b.getX() - nx * sobreposicao * proporcaoB);
+            b.setY(b.getY() - ny * sobreposicao * proporcaoB);
         }
     }
 
